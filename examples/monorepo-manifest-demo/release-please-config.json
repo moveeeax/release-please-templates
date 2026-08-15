@@ -1,0 +1,35 @@
+{
+  "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
+  "bump-minor-pre-major": true,
+  "bump-patch-for-minor-pre-major": true,
+  "separate-pull-requests": true,
+  "changelog-sections": [
+    {
+      "type": "feat",
+      "section": "Features"
+    },
+    {
+      "type": "fix",
+      "section": "Bug Fixes"
+    },
+    {
+      "type": "chore",
+      "section": "Miscellaneous",
+      "hidden": true
+    }
+  ],
+  "packages": {
+    "packages/api": {
+      "release-type": "go",
+      "component": "api"
+    },
+    "packages/cli": {
+      "release-type": "go",
+      "component": "cli"
+    },
+    "libs/pylib": {
+      "release-type": "python",
+      "component": "pylib"
+    }
+  }
+}

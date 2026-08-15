@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rpt"
+version = "0.1.0"
+description = "Validate and simulate release-please template configs"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [{ name = "Michael Tarassov", email = "michael@tarassov.me" }]
+
+[project.optional-dependencies]
+test = ["pytest>=7"]
+
+[project.scripts]
+rpt = "rpt.cli:main"
+
+[tool.setuptools]
+packages = ["rpt"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

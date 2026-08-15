@@ -1,0 +1,14 @@
+{
+  "packages/api": {
+    "commits": "feat(api): add pagination\nfix(api): handle nil",
+    "next_version": "1.3.0"
+  },
+  "packages/cli": {
+    "commits": "fix(cli): correct exit code",
+    "next_version": "0.4.2"
+  },
+  "libs/pylib": {
+    "commits": "feat(pylib)!: rename client",
+    "next_version": "0.10.0"
+  }
+}
