@@ -30,7 +30,7 @@ def test_template_ships_workflow(tpl):
     wf = os.path.join(tpl, ".github", "workflows", "release-please.yml")
     assert os.path.exists(wf)
     body = open(wf).read()
-    assert "googleapis/release-please-action@v4" in body
+    assert "googleapis/release-please-action@v5" in body
     assert "config-file:" in body and "manifest-file:" in body
 
 
