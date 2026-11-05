@@ -1,7 +1,7 @@
 # release-please-templates
 
 [![ci](https://github.com/moveeeax/release-please-templates/actions/workflows/ci.yml/badge.svg)](https://github.com/moveeeax/release-please-templates/actions/workflows/ci.yml)
-[![python](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/)
+[![python](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org/)
 [![license](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
 > Automated releases and changelogs, preconfigured per language.
