@@ -13,7 +13,7 @@ authors = [{ name = "Michael Tarassov", email = "michael@tarassov.me" }]
 dependencies = ["jsonschema>=4.18"]
 
 [project.optional-dependencies]
-test = ["pytest>=7"]
+test = ["pytest>=9.2.0"]
 
 [project.scripts]
 rpt = "rpt.cli:main"
