@@ -25,6 +25,7 @@ docs/
   commit-conventions.md     which commit type bumps what
   pr-flow.md                how the release PR actually works
 rpt/                  the validate + simulate library (this repo's CI target)
+  schemas/config.json the vendored release-please config schema
 ```
 
 Each template ships three files to drop into a repo root:
@@ -65,6 +66,30 @@ $ python -m rpt simulate --config templates/go/release-please-config.json \
 
 ### Bug Fixes
 * off-by-one
+```
+
+`validate` first checks the config against the official release-please
+[`schemas/config.json`](https://github.com/googleapis/release-please/blob/main/schemas/config.json),
+vendored as `rpt/schemas/config.json`, then the invariants the schema does not
+cover (known `release-type`, unique components in multi-package configs, manifest
+keys and semver). Wrong option types, malformed `extra-files` entries and unknown
+keys fail, and unknown keys get a hint:
+
+```console
+$ python -m rpt validate release-please-config.json
+error: config: unknown key 'bump-minor-pre-majr' (did you mean 'bump-minor-pre-major'?)
+error: config['packages']['.']: unknown key 'componnet' (did you mean 'component'?)
+```
+
+The upstream schema accepts any key inside `packages.<path>`, so `rpt` checks
+package entries against the schema's per-package options plus the package-only
+keys release-please reads (`component`, `package-name`, `label`,
+`release-label`). To validate against another copy of the schema, for example
+upstream `main`, pass a URL or a local path:
+
+```console
+$ python -m rpt validate release-please-config.json \
+    --schema-url https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json
 ```
 
 The bump rules mirror release-please: `fix` → patch, `feat` → minor, breaking →

@@ -12,12 +12,14 @@ from .bump import (
     commit_level, release_level, next_version, changelog, simulate,
 )
 from .validate import validate_config, validate_manifest, ValidationError
+from .schema import load_schema, validate_schema, SchemaLoadError
 
 __all__ = [
     "Commit", "parse_commit", "parse_commits",
     "LEVEL_NONE", "LEVEL_PATCH", "LEVEL_MINOR", "LEVEL_MAJOR",
     "commit_level", "release_level", "next_version", "changelog", "simulate",
     "validate_config", "validate_manifest", "ValidationError",
+    "load_schema", "validate_schema", "SchemaLoadError",
 ]
 
 __version__ = "0.2.0"
