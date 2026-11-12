@@ -1,12 +1,16 @@
 """Validate the release-please config and manifest files.
 
-Not a full JSON-schema check — just the invariants that break real setups:
-every package needs a ``release-type``, every manifest key must have a matching
-package and a valid semver, and changelog sections must be well formed.
+``validate_config`` first checks the config against the official
+release-please JSON schema (see ``schema.py``), then the invariants the schema
+does not express: every package needs a known ``release-type``, multi-package
+configs need unique components, and changelog sections must be well formed.
+``validate_manifest`` checks that every manifest key has a matching package and
+a valid semver.
 """
 from __future__ import annotations
 
 from .bump import parse_version
+from .schema import validate_schema
 
 VALID_RELEASE_TYPES = {
     "go", "python", "simple", "terraform-module", "node", "rust", "helm", "maven",
@@ -17,8 +21,11 @@ class ValidationError(Exception):
     pass
 
 
-def validate_config(config: dict) -> list[str]:
-    errors: list[str] = []
+def validate_config(config: dict, schema: dict | None = None) -> list[str]:
+    """Return config errors. ``schema`` defaults to the vendored copy."""
+    errors = validate_schema(config, schema)
+    if not isinstance(config, dict):
+        return errors
     packages = config.get("packages")
     if not isinstance(packages, dict) or not packages:
         errors.append("config.packages must be a non-empty object")
@@ -38,7 +45,12 @@ def validate_config(config: dict) -> list[str]:
         elif len(set(components)) != len(components):
             errors.append("multi-package config: duplicate 'component' names")
 
+    # The vendored schema already requires both keys; this covers a custom
+    # --schema-url that does not, without reporting the same problem twice.
+    schema_saw_sections = any(e.startswith("config['changelog-sections']") for e in errors)
     for i, sec in enumerate(config.get("changelog-sections", [])):
+        if schema_saw_sections:
+            break
         if "type" not in sec or "section" not in sec:
             errors.append(f"changelog-sections[{i}]: needs both 'type' and 'section'")
     return errors

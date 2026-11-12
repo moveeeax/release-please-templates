@@ -12,6 +12,7 @@ import json
 import sys
 
 from .commits import parse_commits
+from .schema import SchemaLoadError, load_schema
 from .validate import validate_config, validate_manifest
 from .bump import simulate
 
@@ -22,8 +23,13 @@ def _load(path: str) -> dict:
 
 
 def cmd_validate(args) -> int:
+    try:
+        schema = load_schema(args.schema_url)
+    except SchemaLoadError as e:
+        print(f"error: {e}", file=sys.stderr)
+        return 2
     config = _load(args.config)
-    errors = validate_config(config)
+    errors = validate_config(config, schema)
     if args.manifest:
         errors += validate_manifest(config, _load(args.manifest))
     if errors:
@@ -63,6 +69,9 @@ def main(argv: list[str] | None = None) -> int:
     v = sub.add_parser("validate", help="validate a release-please config/manifest")
     v.add_argument("config")
     v.add_argument("manifest", nargs="?")
+    v.add_argument("--schema-url", metavar="URL",
+                   help="config schema to validate against (URL or local path); "
+                        "default: the vendored release-please schemas/config.json")
     v.set_defaults(func=cmd_validate)
 
     s = sub.add_parser("simulate", help="simulate a release from commits")
